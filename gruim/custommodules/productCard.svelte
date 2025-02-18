@@ -6,12 +6,12 @@
   export let product;
   let showProduct = false;
 
-  if (!product && showProduct) {
-    onMount(async () => {
+  onMount(async () => {
+    if (!product && showProduct) {
       const response = await fetch(`${process.env.SVELTE_APP_REMOTE_URL}/api/products/${id}`);
-      product = await response.json();
-    });
-  }
+    }
+    product = await response.json();
+  });
 </script>
 
 {#if !product}
