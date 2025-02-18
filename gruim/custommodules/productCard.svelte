@@ -6,7 +6,7 @@
 
   if (!product && showProduct) {
     onMount(async () => {
-      const response = await fetch(`http://localhost:3000/products/S10_1678`);
+      const response = await fetch(`${process.env.SVELTE_APP_REMOTE_URL}/api/products/S10_1678`);
       product = await response.json();
     });
   }

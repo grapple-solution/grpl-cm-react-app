@@ -19,7 +19,7 @@
 
   onMount(async () => {
     const response = await fetch(
-      `http://localhost:3000/products?filter={"limit": 2}`
+      `${process.env.SVELTE_APP_REMOTE_URL}/api/products?filter={"limit": 2}`
     );
     products = await response.json();
     console.log("Products loaded:", products);
