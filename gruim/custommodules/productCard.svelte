@@ -1,12 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  export let id;
+
   export let product;
   let showProduct = false;
 
   if (!product && showProduct) {
     onMount(async () => {
-      const response = await fetch(`${process.env.SVELTE_APP_REMOTE_URL}/api/products/S10_1678`);
+      const response = await fetch(`${process.env.SVELTE_APP_REMOTE_URL}/api/products/${id}`);
       product = await response.json();
     });
   }

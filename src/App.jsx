@@ -3,7 +3,9 @@ import "./index.css";
 import { createRoot } from "react-dom/client";
 import Navbar from "./components/navbar/navbar.component";
 import Footer from "./components/footer/footer.component";
-import ProductList from "./components/products/product-list.component";
+// import ProductList from "./components/products/product-list.component";
+
+let productid = "S10_1678"
 
 import("App/Products/count").then((module) => {
   const ProductCounter = module.default;
@@ -132,6 +134,16 @@ import("App/Products/find").then((module) => {
   });
 });
 
+import("App/productCard").then((module) => {
+  const productCard = module.default;
+  new productCard({
+    target: document.getElementById("productcard"),
+    props: {
+      id: productid
+    },
+  });
+});
+
 const App = () => (
   <div className="min-h-screen flex flex-col">
     <Navbar />
@@ -142,6 +154,8 @@ const App = () => (
       <h2 className="text-2xl font-semibold my-4">Product list</h2>
       <div id="products"></div>
       {/* <ProductList /> */}
+      <h2 className="text-2xl font-semibold my-4">Product card</h2>
+      <div id="productcard"></div>
     </main>
     <Footer />
   </div>
