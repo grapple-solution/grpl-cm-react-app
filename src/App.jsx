@@ -75,6 +75,7 @@ import("App/Products/findById").then((module) => {
       schema: {
         "field-properties": {
           "hidden-fields": ["productLine", "product-scale"],
+          "textarea-fields": ["productDescription"],
         },
       },
     },
@@ -128,8 +129,21 @@ import("App/Products/find").then((module) => {
         quantityInStock: "Quantity In Stock",
         productlinesId: "Product Lines ID",
       },
+      dateFormat: "DD.MM.YYYY - HH:mm",
       enableFilter: true,
-      enableLoadMore: true
+      enableLoadMore: true,
+      filter: {
+        limit: 5,
+        // where: {
+        //   msrp: 95.7
+        // }
+      },
+      schema: {
+        "field-properties": {
+          "hidden-fields": ["productLine"],
+          "additional-sorting-rules": ["productName ASC"],
+        },
+      },
     },
   });
 });
@@ -140,6 +154,76 @@ import("App/productCard").then((module) => {
     target: document.getElementById("productcard"),
     props: {
       id: productid
+    },
+  });
+});
+
+import("App/Orders/find").then((module) => {
+  const Orders = module.default;
+  new Orders({
+    target: document.getElementById("orders"),
+    props: {
+      dateFormat: "YYYY.MM.DD / HH:mm:ss"
+    },
+  });
+});
+
+import("App/Orders").then((module) => {
+  const Orders = module.default;
+  new Orders({
+    target: document.getElementById("orders-admin"),
+    props: {
+      dateFormat: "YYYY.MM.DD - HH:mm:ss",
+      schema: {
+        actions: {
+          edit: {
+            removable: true,
+            "with-confirmation": true,
+          },
+        },
+        "field-properties": {
+          "hidden-fields": ["comments"],
+          "additional-sorting-rules": ["orderDate DESC"],
+          "color-fields": [
+            {
+              field: "color",
+              showOn: "background",
+            }
+          ],
+        },
+        "custom-bulk-actions": [
+          {
+            action: "New Action",
+            bulkFn: (ids) => {
+              // console.log("Bulk action", ids);
+              // return ids;
+            },
+            singleFn: (row) => {
+              console.log("Single action", row);
+            }
+          },
+        ]
+      },
+      visibility: {
+        readOnly: true,
+        message: "You don't have permission to edit orders",
+      },
+      quickFilters: [
+        {
+          label: "ID gt 10418",
+          filter: {
+            id: { gt: 10418 },
+          },
+        },
+        {
+          label: "Customer IDs gt 180",
+          filter: {
+            customersId: { gt: 180 },
+          },
+        },
+      ],
+      enableFilter: true,
+      enableLoadMore: true,
     },
   });
 });
@@ -156,6 +240,10 @@ const App = () => (
       {/* <ProductList /> */}
       <h2 className="text-2xl font-semibold my-4">Product card</h2>
       <div id="productcard"></div>
+      <h2 className="text-2xl font-semibold my-4">Order list</h2>
+      <div id="orders"></div>
+      <h2 className="text-2xl font-semibold my-4">Order list - Admin</h2>
+      <div id="orders-admin"></div>
     </main>
     <Footer />
   </div>
