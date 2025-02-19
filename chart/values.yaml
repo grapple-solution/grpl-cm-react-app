@@ -6,6 +6,8 @@
 env: {}
 # configuration for grapple ApplicationSet (gras)
 gras-deploy:
+  enabled: false
+gras:
   enabled: true
   gras: {}
   grapi:
@@ -122,6 +124,7 @@ gras-deploy:
     controllers: []
     postpatches: []
     injections: []
+    prerelationpatches: []
   gruim:
     # uiimagetag: "0.1.38"
     ssl: true
