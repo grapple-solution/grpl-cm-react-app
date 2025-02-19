@@ -1,16 +1,17 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import type { ProductType, OptionalType } from "./types";
 
-  export let id;
-
-  export let product;
-  let showProduct = false;
+  export let id: OptionalType<number> = undefined;
+  export let product: OptionalType<ProductType> = undefined;
+  export let showProduct: boolean = false;
 
   onMount(async () => {
     if (!product && showProduct) {
-      const response = await fetch(`${process.env.SVELTE_APP_REMOTE_URL}/api/products/${id}`);
+      const url = `${process.env.SVELTE_APP_REMOTE_URL}/api/products/${id || "S10_1678"}`;
+      const response = await fetch(url);
+      product = await response.json();
     }
-    product = await response.json();
   });
 </script>
 
@@ -37,7 +38,7 @@
           {product.productScale}
         </span>
       </div>
-      <p class="text-gray-600 text-sm mb-4 line-clamp-2 h-[110px]">
+      <p class="text-gray-600 text-sm mb-4 line-clamp-2 h-[110px] overflow-hidden">
         {product.productDescription}
       </p>
       <div class="flex items-center mb-4">
