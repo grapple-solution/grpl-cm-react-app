@@ -121,6 +121,7 @@ gras-deploy:
           datasource: "classicmodelsid"
     controllers: []
     postpatches: []
+    injections: []
   gruim:
     # uiimagetag: "0.1.38"
     ssl: true
