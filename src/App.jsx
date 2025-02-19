@@ -5,7 +5,7 @@ import Navbar from "./components/navbar/navbar.component";
 import Footer from "./components/footer/footer.component";
 // import ProductList from "./components/products/product-list.component";
 
-let productid = "S10_1678"
+let productid = "S10_1678";
 
 import("App/Products/count").then((module) => {
   const ProductCounter = module.default;
@@ -153,7 +153,7 @@ import("App/productCard").then((module) => {
   new productCard({
     target: document.getElementById("productcard"),
     props: {
-      id: productid
+      id: productid,
     },
   });
 });
@@ -163,7 +163,7 @@ import("App/Orders/find").then((module) => {
   new Orders({
     target: document.getElementById("orders"),
     props: {
-      dateFormat: "YYYY.MM.DD / HH:mm:ss"
+      dateFormat: "YYYY.MM.DD / HH:mm:ss",
     },
   });
 });
@@ -188,43 +188,72 @@ import("App/Orders").then((module) => {
             {
               field: "color",
               showOn: "background",
-            }
+            },
+          ],
+          "dropdown-fields": [
+            {
+              name: "status",
+              default: {
+                label: "In Process",
+                value: "In Process",
+              },
+              options: [
+                {
+                  label: "Shipped",
+                  value: "Shipped",
+                },
+                {
+                  label: "Cancelled",
+                  value: "Cancelled",
+                },
+              ],
+            },
           ],
         },
         "custom-bulk-actions": [
           {
-            action: "New Action",
+            action: "Update status to Shipped",
             bulkFn: (ids) => {
-              // console.log("Bulk action", ids);
-              // return ids;
+              let results = ids.map(async (id) => {
+                await fetch(`http://localhost:3000/orders/${id}`, {
+                  method: "PATCH",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    status: "Shipped",
+                  }),
+                });
+              });
+              return results;
             },
             singleFn: (row) => {
               console.log("Single action", row);
-            }
+            },
           },
-        ]
+        ],
       },
-      visibility: {
-        readOnly: true,
-        message: "You don't have permission to edit orders",
-      },
-      quickFilters: [
-        {
-          label: "ID gt 10418",
-          filter: {
-            id: { gt: 10418 },
-          },
-        },
-        {
-          label: "Customer IDs gt 180",
-          filter: {
-            customersId: { gt: 180 },
-          },
-        },
-      ],
-      enableFilter: true,
-      enableLoadMore: true,
     },
+    visibility: {
+      readOnly: true,
+      message: "You don't have permission to edit orders",
+    },
+    quickFilters: [
+      {
+        label: "ID gt 10418",
+        filter: {
+          id: { gt: 10418 },
+        },
+      },
+      {
+        label: "Customer IDs gt 180",
+        filter: {
+          customersId: { gt: 180 },
+        },
+      },
+    ],
+    enableFilter: true,
+    enableLoadMore: true,
   });
 });
 
