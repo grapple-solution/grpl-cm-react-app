@@ -146,8 +146,8 @@ gras:
           relationType: belongsTo
           sourceModel: Customers
           # test cases:
-          # http://localhost:3333/customers?filter={%22include%22:[%22employeeNumber%22]}
-          # http://localhost:3333/customers/103/employees
+          # http://localhost:3000/customers?filter={%22include%22:[%22employeeNumber%22]}
+          # http://localhost:3000/customers/103/employees
       - name: offices
         # content: '{"destinationModel":"Offices","foreignKeyName":"officeCode","registerInclusionResolver":true,"relationName":"offices","relationType":"belongsTo","sourceModel":"Employees"}'
         spec:
@@ -158,8 +158,8 @@ gras:
           relationType: belongsTo
           sourceModel: Employees
           # test cases:
-          # http://localhost:3333/employees?filter={%22include%22:[%22offices%22]}
-          # http://localhost:3333/employees/1002/offices
+          # http://localhost:3000/employees?filter={%22include%22:[%22offices%22]}
+          # http://localhost:3000/employees/1002/offices
       - name: officeemployees
         # content: '{"destinationModel":"Employees","foreignKeyName":"officeCode","registerInclusionResolver":true,"relationName":"officeemployees","relationType":"hasMany","sourceModel":"Offices"}'
         spec:
@@ -170,8 +170,8 @@ gras:
           relationType: hasMany
           sourceModel: Offices
           # test cases:
-          # http://localhost:3333/offices?filter={%22include%22:[%22officeemployees%22]}
-          # http://localhost:3333/offices/1/employees
+          # http://localhost:3000/offices?filter={%22include%22:[%22officeemployees%22]}
+          # http://localhost:3000/offices/1/employees
       - name: customers
         # content: '{"destinationModel":"Customers","foreignKeyName":"customerNumber","registerInclusionResolver":true,"relationName":"customers","relationType":"belongsTo","sourceModel":"Orders"}'
         spec:
@@ -182,8 +182,8 @@ gras:
           relationType: belongsTo
           sourceModel: Orders
           # test cases:
-          # http://localhost:3333/orders?filter={%22include%22:[%22customers%22]}
-          # http://localhost:3333/orders/10100/customers
+          # http://localhost:3000/orders?filter={%22include%22:[%22customers%22]}
+          # http://localhost:3000/orders/10100/customers
       - name: productlines
         # content: '{"destinationModel":"Productlines","foreignKeyName":"productlines","registerInclusionResolver":true,"relationName":"productlines","relationType":"belongsTo","sourceModel":"Products"}'
         spec:
@@ -194,8 +194,8 @@ gras:
           relationType: belongsTo
           sourceModel: Products
           # test cases:
-          # http://localhost:3333/products?filter={%22include%22:[%22productlines%22]}
-          # http://localhost:3333/products/S10_1949/productlines
+          # http://localhost:3000/products?filter={%22include%22:[%22productlines%22]}
+          # http://localhost:3000/products/S10_1949/productlines
       - name: productlineproduct
         # content: '{"destinationModel":"Products","foreignKeyName":"productlines","registerInclusionResolver":true,"relationName":"productlineproduct","relationType":"hasMany","sourceModel":"Productlines"}'
         spec:
@@ -206,8 +206,8 @@ gras:
           relationType: hasMany
           sourceModel: Productlines
           # test cases:
-          # http://localhost:3333/productlines?filter={%22include%22:[%22productlineproduct%22]}
-          # http://localhost:3333/productlines/Classic%20Cars/products
+          # http://localhost:3000/productlines?filter={%22include%22:[%22productlineproduct%22]}
+          # http://localhost:3000/productlines/Classic%20Cars/products
       - name: customerorders
         # content: '{"destinationModel":"Orders","foreignKeyName":"customerNumber","registerInclusionResolver":true,"relationName":"customerorders","relationType":"hasMany","sourceModel":"Customers"}'
         spec:
@@ -218,8 +218,8 @@ gras:
           relationType: hasMany
           sourceModel: Customers
           # test cases:
-          # http://localhost:3333/customers?filter={%22include%22:[%22customerorders%22]}
-          # http://localhost:3333/customers/103/orders
+          # http://localhost:3000/customers?filter={%22include%22:[%22customerorders%22]}
+          # http://localhost:3000/customers/103/orders
     #### NOT WORKING YET - help request from backend dev: https://wolke7.atlassian.net/browse/LB4I-176
     # - name: orders
     #   # content: '{"destinationModel":"Orders","foreignKeyName":"orderNumber","registerInclusionResolver":true,"relationName":"orders","relationType":"belongsTo","sourceModel":"Orderdetails"}'
