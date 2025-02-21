@@ -38,14 +38,16 @@
           {product.productScale}
         </span>
       </div>
-      <p class="text-gray-600 text-sm mb-4 line-clamp-2 h-[110px] overflow-hidden">
+      <p
+        class="text-gray-600 text-sm mb-4 line-clamp-2 h-[110px] overflow-hidden"
+      >
         {product.productDescription}
       </p>
       <div class="flex items-center mb-4">
         <span
           class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
         >
-          {product.productLine}
+          {product.productlinesId}
         </span>
         <span class="ml-2 text-sm text-gray-500">
           by {product.productVendor}
@@ -54,7 +56,7 @@
       <div class="flex items-center justify-between mb-4">
         <div class="flex flex-col">
           <span class="text-lg font-bold text-blue-600">
-            ${product.msrp.toFixed(2)}
+            ${product.buyPrice.toFixed(2)}
           </span>
           <span class="text-sm text-gray-500">
             Stock: {product.quantityInStock}
