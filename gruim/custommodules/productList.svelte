@@ -1,11 +1,12 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import ProductCard from "./productCard.svelte";
-  import type { ProductType } from "./types";
+  import type { OptionalType, ProductType } from "./types";
 
-  export let products: ProductType[] | undefined = undefined;
+  export let products: OptionalType<ProductType[]> = undefined;
   export let limit: number = 5;
   export let offset: number = 0;
+  export let isLoadMore: boolean = true;
   export let loadMoreCallback: () => void;
 
   let loading: boolean = true;
@@ -20,6 +21,7 @@
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      isLoadMore = data.length !== 0;
       products = Array.isArray(data) ? data : [];
     } catch (err) {
       error = err instanceof Error ? err.message : "Failed to fetch products";
@@ -67,12 +69,14 @@
       <ProductCard {product} />
     {/each}
   </div>
-  <div class="flex justify-center mt-8">
-    <button
-      on:click={loadMore}
-      class="bg-blue-600 text-white px-4 py-2 rounded"
-    >
-      Load More
-    </button>
-  </div>
+  {#if isLoadMore}
+    <div class="flex justify-center mt-8">
+      <button
+        on:click={loadMore}
+        class="bg-blue-600 text-white px-4 py-2 rounded"
+      >
+        Load More
+      </button>
+    </div>
+  {/if}
 {/if}
