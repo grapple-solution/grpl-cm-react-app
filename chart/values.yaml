@@ -6,6 +6,8 @@
 env: {}
 # configuration for grapple ApplicationSet (gras)
 gras-deploy:
+  enabled: false
+gras:
   enabled: true
   gras: {}
   grapi:
@@ -122,9 +124,9 @@ gras-deploy:
         spec:
           datasource: "classicmodelsid"
     controllers: []
-    postpatches:
-      - name: migrate-db
-        content: bnBtIHJ1biBtaWdyYXRl
+    postpatches: []
+    injections: []
+    prerelationpatches: []
   gruim:
     # uiimagetag: "0.1.38"
     uiimage: grpl/gruim
