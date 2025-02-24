@@ -220,33 +220,29 @@ gras:
           # test cases:
           # http://localhost:3000/customers?filter={%22include%22:[%22customerorders%22]}
           # http://localhost:3000/customers/103/orders
-    #### NOT WORKING YET - help request from backend dev: https://wolke7.atlassian.net/browse/LB4I-176
-    # - name: orders
-    #   # content: '{"destinationModel":"Orders","foreignKeyName":"orderNumber","registerInclusionResolver":true,"relationName":"orders","relationType":"belongsTo","sourceModel":"Orderdetails"}'
-    #   spec:
-    #     destinationModel: Orders
-    #     foreignKeyName: orderNumber
-    #     registerInclusionResolver: true
-    #     relationName: orders
-    #     relationType: belongsTo
-    #     sourceModel: Orderdetails
-    #     # test cases:
-    #     # ???
-    #     # ???
-    #### NOT WORKING YET - help request from backend dev: https://wolke7.atlassian.net/browse/LB4I-176
-    # - name: orderdetails
-    #   # content: '{"destinationModel":"Orderdetails","foreignKeyName":"orderNumber","registerInclusionResolver":true,"relationName":"orderdetails","relationType":"belongsTo","sourceModel":"Orders"}'
-    #   spec:
-    #     destinationModel: Orderdetails
-    #     foreignKeyName: orderNumber
-    #     registerInclusionResolver: true
-    #     relationName: orderdetails
-    #     relationType: belongsTo
-    #     sourceModel: Orders
-    #     # test cases:
-    #     # ???
-    #     # ???
-
+      - name: orders
+        # content: '{"destinationModel":"Orders","foreignKeyName":"orderNumber","registerInclusionResolver":true,"relationName":"orders","relationType":"belongsTo","sourceModel":"Orderdetails"}'
+        spec:
+          destinationModel: Orders
+          foreignKeyName: orderNumber
+          registerInclusionResolver: true
+          relationName: orders
+          relationType: belongsTo
+          sourceModel: Orderdetails
+          # test cases:
+          # http://localhost:3000/orderdetails/?filter={%22include%22:[%22orders%22]}
+      - name: orderdetails
+        # content: '{"destinationModel":"Orderdetails","foreignKeyName":"orderNumber","registerInclusionResolver":true,"relationName":"orderdetails","relationType":"hasMany","sourceModel":"Orders"}'
+        spec:
+          destinationModel: Orderdetails
+          foreignKeyName: orderNumber
+          registerInclusionResolver: true
+          relationName: orderdetails
+          relationType: hasMany
+          sourceModel: Orders
+          # test cases:
+          # http://localhost:3000/orders?filter={%22include%22:[%22orderdetails%22]}
+          # http://localhost:3000/orders/10100/orderdetails
     restcruds:
       - name: "classicmodels"
         spec:
