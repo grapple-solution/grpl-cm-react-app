@@ -1,10 +1,22 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { CartIcon, MenuIcon, StoreIcon } from "../../utils/icons.util";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
-  const navItems = ["Home", "Products", "Contact", "About Us"];
+  const navItems = [
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: "Contact", path: "/contact" },
+    { name: "About Us", path: "/about-us" },
+  ];
+
+  const isActive = (path) => {
+    if (path === "/" && location.pathname !== "/") return false;
+    return location.pathname.startsWith(path);
+  };
 
   return (
     <nav className="bg-white shadow-lg">
@@ -15,13 +27,17 @@ const Navbar = () => {
           </div>
           <div className="hidden md:flex items-center justify-center flex-1">
             {navItems.map((item) => (
-              <a
-                key={item}
-                href={`/${item === "Home" ? "" : item.toLowerCase().replace(" ", "-")}`}
-                className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`px-3 py-2 rounded-md text-sm font-medium ${
+                  isActive(item.path)
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                }`}
               >
-                {item}
-              </a>
+                {item.name}
+              </Link>
             ))}
           </div>
           <div className="flex items-center">
@@ -41,13 +57,18 @@ const Navbar = () => {
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navItems.map((item) => (
-              <a
-                key={item}
-                href={`/${item.toLowerCase().replace(" ", "-")}`}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+              <Link
+                key={item.name}
+                to={item.path}
+                className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  isActive(item.path)
+                    ? "text-blue-600 bg-blue-50"
+                    : "text-gray-700 hover:text-blue-600 hover:bg-gray-50"
+                }`}
+                onClick={() => setIsOpen(false)}
               >
-                {item}
-              </a>
+                {item.name}
+              </Link>
             ))}
           </div>
         </div>
