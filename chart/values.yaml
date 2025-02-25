@@ -188,7 +188,7 @@ gras:
         # content: '{"destinationModel":"Productlines","foreignKeyName":"productlines","registerInclusionResolver":true,"relationName":"productlines","relationType":"belongsTo","sourceModel":"Products"}'
         spec:
           destinationModel: Productlines
-          foreignKeyName: productlines
+          foreignKeyName: productLine
           registerInclusionResolver: true
           relationName: productlines
           relationType: belongsTo
@@ -200,7 +200,7 @@ gras:
         # content: '{"destinationModel":"Products","foreignKeyName":"productlines","registerInclusionResolver":true,"relationName":"productlineproduct","relationType":"hasMany","sourceModel":"Productlines"}'
         spec:
           destinationModel: Products
-          foreignKeyName: productlines
+          foreignKeyName: productLine
           registerInclusionResolver: true
           relationName: productlineproduct
           relationType: hasMany
