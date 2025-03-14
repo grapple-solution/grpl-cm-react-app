@@ -136,6 +136,7 @@ tasks:
         yq e -i '.vars.IMAGE_REGISTRY = "{{.IMAGE_REGISTRY}}"' devspace.yaml
         yq e -i '.vars.IMAGE_REPO = "{{.IMAGE_REPO}}"' devspace.yaml
         devspace build --tag {{.TAG}} -n default --no-warn
+        devspace build --tag "latest" -n default --no-warn
 
   build-images-local:
     desc: Build the images
