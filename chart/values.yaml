@@ -256,6 +256,7 @@ gras:
           # test cases:
           # http://localhost:3000/orders?filter={%22include%22:[%22orderdetails%22]}
           # http://localhost:3000/orders/10100/orderdetails
+          # http://localhost:3000/orderdetails/10107%7CS10_1678?filter={%22include%22:[%22orders%22]}
     restcruds:
       - name: "classicmodels"
         spec:
