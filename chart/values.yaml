@@ -41,9 +41,9 @@ gras:
                   sleep 2;
                 done;
               fi
-      - name: update-db-202501
+      - name: update-db-202502
         spec:
-          name: update-db-202501
+          name: update-db-202502
           image: mysql
           command:
             - bash
@@ -55,11 +55,24 @@ gras:
                 sleep 2;
               done;
               echo "db available now..."
-              if ! mysql -h ${host} -P ${port} -u ${username} -p${password} -e "use classicmodels; SHOW COLUMNS FROM Rapport LIKE 'kundeIds'; " | grep -i kunde; then
+              if mysql -h ${host} -P ${port} -u ${username} -p${password} -e "use classicmodels; SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME = 'employees_ibfk_1' AND CONSTRAINT_SCHEMA = 'classicmodels'; " | grep -i employees_ibfk_1; then
                 echo "run the upgrade..."
-                mysql -h ${host} -P ${port} -u ${username} -p${password} -e 'use classicmodels; ALTER TABLE `Rapport` ADD COLUMN `kundeIds` varchar(255) NULL AFTER `kundeId`; SET SQL_SAFE_UPDATES = 0; UPDATE Rapport AS a INNER JOIN Rapport AS b ON a.kundeId = b.kundeId SET a.kundeIds = concat("[",b.kundeId,"]"); SET SQL_SAFE_UPDATES = 1; ALTER TABLE `Rapport` DROP COLUMN `kundeId`; ALTER TABLE `ArchivedRapport` ADD COLUMN `kundeIds` varchar(255) NULL AFTER `kundeId`; SET SQL_SAFE_UPDATES = 0; UPDATE ArchivedRapport AS a INNER JOIN ArchivedRapport AS b ON a.kundeId = b.kundeId SET a.kundeIds = concat("[",b.kundeId,"]"); SET SQL_SAFE_UPDATES = 1; ALTER TABLE `ArchivedRapport` DROP COLUMN `kundeId`;'
+                mysql -h ${host} -P ${port} -u ${username} -p${password} -e '
+                  use classicmodels; 
+                  ALTER TABLE `employees` DROP CONSTRAINT `employees_ibfk_1`;
+                  ALTER TABLE orderdetails ADD COLUMN id varchar(100) AS (CONCAT(orderNumber, "|", productCode)) STORED FIRST;
+                  -- drop constraints
+                  ALTER TABLE orders DROP constraint `orders_ibfk_1`;
+                  ALTER TABLE orderdetails DROP constraint `orderdetails_ibfk_1`;
+                  ALTER TABLE orderdetails DROP constraint `orderdetails_ibfk_2`;
+                  -- drop primary key
+                  ALTER TABLE orderdetails DROP PRIMARY KEY, ADD PRIMARY KEY(id);
+                  -- add constraints again
+                  ALTER TABLE orderdetails ADD CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`orderNumber`) REFERENCES `orders` (`orderNumber`);
+                  ALTER TABLE orderdetails ADD CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`productCode`) REFERENCES `products` (`productCode`);
+                  ALTER TABLE orders ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customerNumber`) REFERENCES `customers` (`customerNumber`);'
               else
-                echo "update-db-202501 already patched"
+                echo "update-db-202502 already patched"
               fi
     extraSecrets:
       - grpl-test-cm-conn-credential

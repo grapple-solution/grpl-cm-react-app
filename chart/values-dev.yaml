@@ -76,7 +76,17 @@ gras:
                 mysql -h ${host} -P ${port} -u ${username} -p${password} -e '
                   use classicmodels; 
                   ALTER TABLE `employees` DROP CONSTRAINT `employees_ibfk_1`;
-                  ALTER TABLE orderdetails ADD COLUMN id varchar(100) AS (CONCAT(orderNumber, "|", productCode)) STORED FIRST;'
+                  ALTER TABLE orderdetails ADD COLUMN id varchar(100) AS (CONCAT(orderNumber, "|", productCode)) STORED FIRST;
+                  -- drop constraints
+                  ALTER TABLE orders DROP constraint `orders_ibfk_1`;
+                  ALTER TABLE orderdetails DROP constraint `orderdetails_ibfk_1`;
+                  ALTER TABLE orderdetails DROP constraint `orderdetails_ibfk_2`;
+                  -- drop primary key
+                  ALTER TABLE orderdetails DROP PRIMARY KEY, ADD PRIMARY KEY(id);
+                  -- add constraints again
+                  ALTER TABLE orderdetails ADD CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`orderNumber`) REFERENCES `orders` (`orderNumber`);
+                  ALTER TABLE orderdetails ADD CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`productCode`) REFERENCES `products` (`productCode`);
+                  ALTER TABLE orders ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customerNumber`) REFERENCES `customers` (`customerNumber`);'
               else
                 echo "update-db-202502 already patched"
               fi
