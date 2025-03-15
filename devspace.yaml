@@ -1,8 +1,8 @@
 version: v2beta1
-name: grapple-template
+name: cm
 vars:
   IMAGE_REGISTRY: "grpl"
-  IMAGE_REPO: "grapple-template"
+  IMAGE_REPO: "cm"
 # This is a list of `pipelines` that DevSpace can execute (you can define your own)
 functions:
   patch-values-file: |-
@@ -53,11 +53,11 @@ images:
     dockerfile: ./Dockerfile
     buildKit: # {} # implemented for bitbucket pipeline with the patch at the end of this file
       args: [--platform, 'linux/amd64,linux/arm64']
-  # data:
-  #   image: "${IMAGE_REGISTRY}/${IMAGE_REPO}-data:devspace"
-  #   dockerfile: ./Dockerfile.data
-  #   buildKit: # {} # implemented for bitbucket pipeline with the patch at the end of this file
-  #     args: [--platform, 'linux/amd64,linux/arm64']
+  data:
+    image: "${IMAGE_REGISTRY}/${IMAGE_REPO}-data:devspace"
+    dockerfile: ./Dockerfile.data
+    buildKit: # {} # implemented for bitbucket pipeline with the patch at the end of this file
+      args: [--platform, 'linux/amd64,linux/arm64']
 # This is a list of `deployments` that DevSpace can create for this project
 deployments:
   app:

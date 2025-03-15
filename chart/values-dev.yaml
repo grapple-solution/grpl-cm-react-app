@@ -16,6 +16,81 @@ gras:
   grapi:
     ssl: false
     autorestartgruim: false
+    initContainers:
+      - name: init-db
+        spec:
+          name: init-db
+          image: grpl/cm-data:data
+          command:
+            - bash
+            - -c
+            - |
+              sleep 5;
+              while ! mysql -h $(host) -P $(port) -u $(username) -p$(password) -e "show databases;" 2>/dev/null; do
+                echo -n .;
+                sleep 2;
+              done;
+              if mysql -h $(host) -P $(port) -u $(username) -p$(password) -e "USE classicmodels; SET @tablename := (select table_name from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'classicmodels' limit 1); set @qry1:= concat('select * from ',@tablename,' limit 1'); prepare stmt from @qry1 ; execute stmt ;" ; then
+                echo "database already exists...";
+              else
+                mysql -h $(host) -P $(port) -u $(username) -p$(password) < ./db.sql;
+              fi
+      - name: wait-for-db
+        spec:
+          name: wait-for-db
+          image: grpl/cm-data:data
+          command:
+            - bash
+            - -c
+            - |
+              sleep 5;
+              while ! mysql -h $(host) -P $(port) -u $(username) -p$(password) -e "show databases;" 2>/dev/null; do
+                echo -n .;
+                sleep 2;
+              done;
+              if mysql -h $(host) -P $(port) -u $(username) -p$(password) -e "USE classicmodels; SET @tablename := (select table_name from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'classicmodels' limit 1); set @qry1:= concat('select * from ',@tablename,' limit 1'); prepare stmt from @qry1 ; execute stmt ;" ; then
+                echo "database already exists..."
+              else
+                echo "wait for database"
+                while ! mysql -h $(host) -P $(port) -u $(username) -p$(password) -e "USE classicmodels; SET @tablename := (select table_name from information_schema.tables where table_type = 'BASE TABLE' and table_schema = 'classicmodels' limit 1); set @qry1:= concat('select * from ',@tablename,' limit 1'); prepare stmt from @qry1 ; execute stmt ;"; do
+                  echo -n .;
+                  sleep 2;
+                done;
+              fi
+      - name: update-db-202502
+        spec:
+          name: update-db-202502
+          image: mysql
+          command:
+            - bash
+            - -c
+            - |
+              sleep 5;
+              while ! mysql -h $(host) -P $(port) -u $(username) -p$(password) -e "show databases;" 2>/dev/null; do
+                echo -n .;
+                sleep 2;
+              done;
+              echo "db available now..."
+              if mysql -h ${host} -P ${port} -u ${username} -p${password} -e "use classicmodels; SELECT * FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS WHERE CONSTRAINT_NAME = 'employees_ibfk_1' AND CONSTRAINT_SCHEMA = 'classicmodels'; " | grep -i employees_ibfk_1; then
+                echo "run the upgrade..."
+                mysql -h ${host} -P ${port} -u ${username} -p${password} -e '
+                  use classicmodels; 
+                  ALTER TABLE `employees` DROP CONSTRAINT `employees_ibfk_1`;
+                  ALTER TABLE orderdetails ADD COLUMN id varchar(100) AS (CONCAT(orderNumber, "|", productCode)) STORED FIRST;
+                  -- drop constraints
+                  ALTER TABLE orders DROP constraint `orders_ibfk_1`;
+                  ALTER TABLE orderdetails DROP constraint `orderdetails_ibfk_1`;
+                  ALTER TABLE orderdetails DROP constraint `orderdetails_ibfk_2`;
+                  -- drop primary key
+                  ALTER TABLE orderdetails DROP PRIMARY KEY, ADD PRIMARY KEY(id);
+                  -- add constraints again
+                  ALTER TABLE orderdetails ADD CONSTRAINT `orderdetails_ibfk_1` FOREIGN KEY (`orderNumber`) REFERENCES `orders` (`orderNumber`);
+                  ALTER TABLE orderdetails ADD CONSTRAINT `orderdetails_ibfk_2` FOREIGN KEY (`productCode`) REFERENCES `products` (`productCode`);
+                  ALTER TABLE orders ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customerNumber`) REFERENCES `customers` (`customerNumber`);'
+              else
+                echo "update-db-202502 already patched"
+              fi
+
   gruim:
     ssl: false
 
