@@ -51,11 +51,17 @@ module.exports = {
             loader: "postcss-loader",
             options: {
               postcssOptions: {
-                plugins: {},
+                plugins: {
+                  tailwindcss: {},
+                },
               },
             },
           },
         ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
       },
     ],
   },
