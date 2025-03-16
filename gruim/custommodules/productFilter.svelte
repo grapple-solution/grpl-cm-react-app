@@ -1,10 +1,11 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
+  import { ProductLineType } from "./types";
 
   const dispatch = createEventDispatcher();
   let showFilters = false;
   let priceRange = { min: 0, max: 0 };
-  let categories = [];
+  let categories: ProductLineType[] = [];
   let tempPriceRange = { min: 0, max: 0 };
   let tempCategories: string[] = [];
   let appliedPriceRange = { min: 0, max: 0 };
@@ -24,7 +25,7 @@
     };
 
     const pls = {
-      fields: ["id"],
+      fields: ["productLine"],
     };
 
     const [maxResponse, minResponse, plsResponse] = await Promise.all([
@@ -41,7 +42,7 @@
 
     const maxData = await maxResponse.json();
     const minData = await minResponse.json();
-    const plsData = await plsResponse.json();
+    const plsData: ProductLineType[] = await plsResponse.json();
 
     priceRange = {
       min: minData[0].buyPrice,
@@ -49,7 +50,7 @@
     };
     tempPriceRange = { ...priceRange };
     appliedPriceRange = { ...priceRange };
-    categories = Array.from(new Set(plsData.map((p: { id: string; }) => p.id))).sort();
+    categories = Array.from(new Set(plsData.map((p) => p))).sort((a, b) => a.productLine.localeCompare(b.productLine));
   });
 
   const handleProductLineToggle = (productLine: string) => {
@@ -132,11 +133,11 @@
               <label class="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={tempCategories.includes(category)}
-                  on:change={() => handleProductLineToggle(category)}
+                  checked={tempCategories.includes(category.productLine)}
+                  on:change={() => handleProductLineToggle(category.productLine)}
                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                 />
-                <span class="ml-2 text-sm text-gray-600">{category}</span>
+                <span class="ml-2 text-sm text-gray-600">{category.productLine}</span>
               </label>
             {/each}
           </div>

@@ -37,7 +37,7 @@
     if (productLines.length) {
       where = {
         ...where,
-        ...{ productlinesId: { inq: productLines } },
+        ...{ productLine: { inq: productLines } },
       };
     }
 
