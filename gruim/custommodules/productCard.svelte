@@ -47,7 +47,7 @@
         <span
           class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium"
         >
-          {product.productlinesId}
+          {product.productLine}
         </span>
         <span class="ml-2 text-sm text-gray-500">
           by {product.productVendor}
