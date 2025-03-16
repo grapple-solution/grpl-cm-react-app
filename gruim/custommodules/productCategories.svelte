@@ -1,7 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { ProductLineType } from "./types";
 
-  let productlines = [];
+  let productlines: ProductLineType[] = [];
 
   onMount(async () => {
     const response = await fetch(
@@ -12,17 +13,17 @@
 </script>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-  {#each productlines as productline (productline.id)}
+  {#each productlines as productline (productline.productLine)}
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
       <img
         src="https://placehold.co/600x400"
-        alt={productline.id}
+        alt={productline.productLine}
         class="w-full h-64 object-cover"
       />
       <div class="p-6">
-        <h2 class="text-2xl font-bold mb-2">{productline.id}</h2>
+        <h2 class="text-2xl font-bold mb-2">{productline.productLine}</h2>
         <p class="text-gray-600 mb-4">
-          Explore our collection of meticulously crafted {productline.id} models.
+          Explore our collection of meticulously crafted {productline.productLine} models.
         </p>
         <a
           href="/products"

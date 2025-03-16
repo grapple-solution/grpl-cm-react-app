@@ -1,7 +1,8 @@
 export type OptionalType<T> = T | undefined;
+export type NullableType<T> = T | null;
 
 export type ProductType = {
-  id: string;
+  productCode: string;
   productName: string;
   productDescription: string;
   productLine: string;
@@ -10,5 +11,11 @@ export type ProductType = {
   buyPrice: number;
   msrp: number;
   quantityInStock: number;
-  productlinesId: string;
+}
+
+export type ProductLineType = {
+  productLine: string;
+  textDescription: string;
+  htmlDescription: NullableType<string>;
+  image: NullableType<string>;
 }
